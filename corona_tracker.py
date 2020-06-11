@@ -14,8 +14,6 @@ plt.rcParams["figure.figsize"] = [16,9]
 
 path = str(os.getcwd()) + "/coronadata/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/"
 
-#path = "C:/Users/Maanav Singh/Desktop/project programs/texas_bot/coronadata/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/"
-
 class coronaTracker:
     def __init__(self, isGlobal, isLight = True):
         #instance variables
@@ -24,19 +22,6 @@ class coronaTracker:
         self.isGlobal = isGlobal
         self.dailyReports = {}
 
-        # csv_path = ""
-        # # intialize path and dataset
-        # os.path.join(path, os.sep, "coronadata", "CODID-19","csse_covid_19_data")
-        # if self.isGlobal:
-        #     os.path.join(path, os.sep, "csse_covid_19_daily_reports")
-        # else:
-        #     pass
-        # os.remove(path)
-        # os.makedirs(path)
-        # git.Git(path).clone("https://github.com/CSSEGISandData/COVID-19.git")
-
-        #print(path)
-        #print(os.listdir(path))
 
         git.Git(str(os.getcwd()) + "/coronadata/COVID-19").pull("https://github.com/CSSEGISandData/COVID-19.git")
         for file in os.listdir(path):
