@@ -14,6 +14,7 @@ plt.rcParams["figure.figsize"] = [16,9]
 
 path = str(os.getcwd()) + "/coronadata/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/"
 
+#path = "C:/Users/Maanav Singh/Desktop/project programs/texas_bot/coronadata/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/"
 
 class coronaTracker:
     def __init__(self, isGlobal, isLight = True):
@@ -23,19 +24,37 @@ class coronaTracker:
         self.isGlobal = isGlobal
         self.dailyReports = {}
 
-        
+        # csv_path = ""
+        # # intialize path and dataset
+        # os.path.join(path, os.sep, "coronadata", "CODID-19","csse_covid_19_data")
+        # if self.isGlobal:
+        #     os.path.join(path, os.sep, "csse_covid_19_daily_reports")
+        # else:
+        #     pass
+        # os.remove(path)
+        # os.makedirs(path)
+        # git.Git(path).clone("https://github.com/CSSEGISandData/COVID-19.git")
 
-        print(isLight)
+        #print(path)
+        #print(os.listdir(path))
+
+        git.Git(str(os.getcwd()) + "/coronadata/COVID-19").pull("https://github.com/CSSEGISandData/COVID-19.git")
         for file in os.listdir(path):
             if file[0] != "R":
-                data = pd.read_csv(path + file)
-                self.dailyReports.update({ file[:-4] : data})
+                if file[:-4] not in list(self.dailyReports.keys()):
+                    data = pd.read_csv(path + file)
+                    self.dailyReports.update({ file[:-4] : data})
 
     # work in progress
     def updateDataset(self):
         # get daily COVID data from Johns Hopkins github
-        git.Git(path).clone("https://github.com/CSSEGISandData/COVID-19.git")
-
+        git.Git(str(os.getcwd()) + "/coronadata/COVID-19").pull("https://github.com/CSSEGISandData/COVID-19.git")
+        for file in os.listdir(path):
+            if file[0] != "R":
+                if file[:-4] not in list(self.dailyReports.keys()):
+                    data = pd.read_csv(path + file)
+                    self.dailyReports.update({ file[:-4] : data})
+        return list(self.dailyReports.keys())[-1]
 
     def graph(self, metric, region="all", isLogscale = False):
         if self.isGlobal:
@@ -45,9 +64,8 @@ class coronaTracker:
             # regions are countries
             currentNumericalDate = 0
 
-
             for index, date in enumerate(self.dailyReports):
-                if index%3 == 1 or (index == (len(self.dailyReports) - 1)):
+                if index%2 == 1 or (index == (len(self.dailyReports) - 1)):
                     data = self.dailyReports.get(date)
 
 
@@ -63,7 +81,7 @@ class coronaTracker:
                         listMetricPerDay.append(new_data)
                         listDate.append(date)
 
-                    listNumericalDate.append(currentNumericalDate*3)
+                    listNumericalDate.append(currentNumericalDate)
                     currentNumericalDate += 1
             # graph data
             plt.clf()
@@ -91,3 +109,8 @@ class coronaTracker:
             pass
             # regions are states
 
+'''
+object = coronaTracker(True)
+print(object.graph("Confirmed"))
+print(object.graph("Deaths", isLogscale=True))
+'''
