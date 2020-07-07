@@ -12,7 +12,7 @@ plt.rcParams["figure.figsize"] = [16,9]
 
 #runner path
 
-path = str(os.getcwd()) + "/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/"
+path = str(os.getcwd()) + "/COVID-19/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/"
 
 class coronaTracker:
     def __init__(self, isGlobal, isLight = True):
@@ -22,7 +22,7 @@ class coronaTracker:
         self.isGlobal = isGlobal
         self.dailyReports = {}
 
-        git.Git(str(os.getcwd()) + "/COVID-19").pull("https://github.com/CSSEGISandData/COVID-19.git")
+        git.Git(str(os.getcwd()) + "/COVID-19/COVID-19").pull("https://github.com/CSSEGISandData/COVID-19.git")
         for file in os.listdir(path):
             if file[0] != "R":
                 if file[:-4] not in list(self.dailyReports.keys()):
@@ -32,7 +32,7 @@ class coronaTracker:
     # work in progress
     def updateDataset(self):
         # get daily COVID data from Johns Hopkins github
-        git.Git(str(os.getcwd()) + "/COVID-19").pull("https://github.com/CSSEGISandData/COVID-19.git")
+        git.Git(str(os.getcwd()) + "/COVID-19/COVID-19").clone("https://github.com/CSSEGISandData/COVID-19.git")
         for file in os.listdir(path):
             if file[0] != "R":
                 if file[:-4] not in list(self.dailyReports.keys()):
@@ -65,7 +65,7 @@ class coronaTracker:
                         listDate.append(date)
 
                     listNumericalDate.append(currentNumericalDate)
-                    currentNumericalDate += 1
+                    currentNumericalDate += 2
             # graph data
             plt.clf()
             plt.plot(listNumericalDate, listMetricPerDay)
